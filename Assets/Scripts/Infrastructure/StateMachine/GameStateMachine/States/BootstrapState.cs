@@ -18,5 +18,10 @@ namespace Infrastructure.StateMachine.GameStateMachine.States
         {
             
         }
+
+        private void RegisterServices()
+        {
+            
+        }
     }
 }
