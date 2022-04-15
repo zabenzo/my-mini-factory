@@ -6,8 +6,7 @@ namespace Game.Player
     [RequireComponent(typeof(Rigidbody))]
     public class PlayerMove : MonoBehaviour
     {
-        public float Speed;
-        public float RotationSpeed;
+        public float MoveSpeed;
 
         private IInputService _input;
         private Rigidbody _rigidbody;
@@ -20,35 +19,15 @@ namespace Game.Player
             _rigidbody = GetComponent<Rigidbody>();
         }
 
-        private void Update()
+        private void FixedUpdate()
         {
-            if (HasInput())
+            if (_input.HasInput)
             {
                 MovePlayer();
-                UpdateCurrentDirection();
-                LookAtCurrentDirection();
-            }
-            else
-            {
-                LookAtPreviousDirection();
             }
         }
 
         private void MovePlayer() => 
-            _rigidbody.velocity = _input.Direction * Time.fixedDeltaTime * Speed;
-
-        private void LookAtCurrentDirection() =>
-            _rigidbody.rotation = Quaternion.Slerp(transform.rotation, 
-                Quaternion.LookRotation(_currentDirection), 
-                Time.deltaTime * RotationSpeed);
-
-        private void UpdateCurrentDirection() => 
-            _currentDirection = _input.Direction;
-
-        private void LookAtPreviousDirection() => 
-            _rigidbody.rotation = Quaternion.LookRotation(_currentDirection);
-
-        private bool HasInput() => 
-            _input.Direction != Vector3.zero;
+            _rigidbody.velocity = _input.Direction.normalized * MoveSpeed * Time.fixedDeltaTime;
     }
 }
