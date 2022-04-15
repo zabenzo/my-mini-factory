@@ -1,3 +1,6 @@
+using Infrastructure.DI;
+using Infrastructure.Services.InputService;
+
 namespace Infrastructure.StateMachine.GameStateMachine.States
 {
     public class BootstrapState : IState
@@ -7,6 +10,8 @@ namespace Infrastructure.StateMachine.GameStateMachine.States
         public BootstrapState(IGameStateMachine gameStateMachine)
         {
             _gameStateMachine = gameStateMachine;
+            
+            RegisterServices();
         }
         
         public void Exit()
@@ -21,7 +26,14 @@ namespace Infrastructure.StateMachine.GameStateMachine.States
 
         private void RegisterServices()
         {
-            
+            RegisterStateMachine();
+            RegisterInputSystem();
         }
+
+        private void RegisterInputSystem() => 
+            SimpleDI.Container.RegisterSingle<IInputService>(new InputService());
+
+        private void RegisterStateMachine() => 
+            SimpleDI.Container.RegisterSingle<IGameStateMachine>(_gameStateMachine);
     }
 }
